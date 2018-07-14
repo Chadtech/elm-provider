@@ -37,6 +37,8 @@ module Html.Provider
         , figure
         , footer
         , form
+        , from
+        , fromStandardHtml
         , h1
         , h2
         , h3
@@ -111,14 +113,14 @@ module Html.Provider
 expect to use frequently will be closer to the top.
 
 
+# Provider
+
+@docs connect, render, fromStandardHtml, from
+
+
 # Primitives
 
 @docs Html, Attribute, text, node, map
-
-
-# Programs
-
-@docs beginnerProgram, program, programWithFlags
 
 
 # Tags
@@ -228,10 +230,14 @@ type Html model msg
     = Html String (List (Attribute msg)) (List (Html model msg))
     | Text String
     | Component (model -> Html model msg)
+    | RealHtml (Html.Html msg)
 
 
-
---| Component (model -> Html.Html msg)
+{-| You will probably want to use `Html` from the standard Elm Html library. This function can help you slip standard html into an `Html.Provider.Html model msg`.
+-}
+fromStandardHtml : Html.Html msg -> Html model msg
+fromStandardHtml =
+    RealHtml
 
 
 {-| Set attributes on your `Html`. Learn more in the
@@ -241,11 +247,26 @@ type alias Attribute msg =
     VirtualDom.Property msg
 
 
+{-| `connect` is fairly simple, it takes a function that maps `model` to `props` and a function that needs those `props` to render `Html` and with those two pieces it makes that `Html`. This way your rendering and prop-building can be discrete steps.
+-}
 connect : (props -> Html model msg) -> (model -> props) -> Html model msg
 connect viewF toProps =
     Component (viewF << toProps)
 
 
+{-| `render` turns this packages custom `Html.Provier.Html` type into the standard `Html.Html` type used in Elm apps
+
+    view : Model -> Html.Html Msg
+    view model =
+        Html.div
+            []
+            [ Html.Provider.render container model ]
+
+    container : Html.Provider.Html Model Msg
+    container =
+        Html.Provider.p [] []
+
+-}
 render : Html model msg -> model -> Html.Html msg
 render html model =
     renderFlipped model html
@@ -264,6 +285,43 @@ renderFlipped model html =
 
         Component viewF ->
             render (viewF model) model
+
+        RealHtml realHtml ->
+            realHtml
+
+
+{-| You can target specific parts of your model with `from`
+
+    type alias Model =
+        { user : User }
+
+    view : Html Model Msg
+    view =
+        div
+            []
+            [ Html.Provider.from .user userView
+            -- ..
+            ]
+
+    userView : Html User Msg
+    userView =
+        -- ..
+
+-}
+from : (b -> a) -> Html a msg -> Html b msg
+from f html =
+    case html of
+        Html tag attrs children ->
+            Html tag attrs (List.map (from f) children)
+
+        Text str ->
+            Text str
+
+        Component viewF ->
+            Component (f >> viewF >> from f)
+
+        RealHtml realHtml ->
+            RealHtml realHtml
 
 
 
@@ -341,6 +399,10 @@ map ctor html =
 
         Component viewF ->
             Component (viewF >> map ctor)
+
+        RealHtml realHtml ->
+            Html.map ctor realHtml
+                |> RealHtml
 
 
 

@@ -15,9 +15,6 @@ type alias Props =
 
 view : Props -> Html Model Msg
 view props =
-    div
+    p
         []
-        [ p
-            []
-            [ Html.text props.greeting ]
-        ]
+        [ Html.text props.greeting ]
