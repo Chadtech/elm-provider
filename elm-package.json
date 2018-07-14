@@ -1,7 +1,7 @@
 {
     "version": "1.0.0",
-    "summary": "Gulp Elm Boilerplate",
-    "repository": "https://github.com/Chadtech/gulp-elm-boilerplate.git",
+    "summary": "The container / component pattern in Elm",
+    "repository": "https://github.com/Chadtech/elm-provider.git",
     "license": "BSD3",
     "source-directories": [
         "./src"
