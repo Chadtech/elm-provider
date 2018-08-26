@@ -23,9 +23,16 @@ export default const ({name}) =>
 
 ```
 
-What the UI component wants is a name to greet, but we need to construct that name from information in state, because the state doenst just have a thing in it called name.
+What the UI component wants is a name to greet, but we need to construct that name from information in state, because the state doesnt just have a thing in it called name.
 
-Personally, I dont really think this component/container pattern is the way to go, but there is a real problem its trying to solve. When you have a big application, and your UI components are "very far" from your main model, and require information that different from what exists literally in the main model, it makes sense to explicitly define what the component needs in contrast to what the main model has and have an explicit transition step between your model and your component props. I have met a few people who tried Elm coming from Redux who said they miss the container/component stuff in Redux. This package is for them, to see if what they want is possible in Elm.
+Personally, I really dont think this component/container pattern is the best way to do things, this repo is really just an experiment. I have met a few people who tried Elm coming from Redux who said they miss the container / component stuff in Redux. This package is for them; to see if what they want is possible in Elm. Its also demonstrate to Redux people a "middle step" between what they are used to an what is normal in Elm.
+
+# Why are containers not good in Elm?
+
+1. Redux people want their components to be agnostic about the shape of their state. They know the view component needs something `A`, and the state has something else `B`, and so they need a step from `B` to `A`. They also know that if they want to re-use the component, their `A` might sometimes come from a `B` and sometimes a `C`. For the component to be re-usable, `A` has to be a de-coupled thing if its going to be used in different places. Furthermore, if going from `B` to `A` is sufficiently complicated, then for organizational and clarity reasons alone you should separate things out. However, (0) Re-use of big UI components is the exception, not the norm, and containers in Redux are very much the norm; (1) The complexity of going from `B` to `A` is usually pretty low, which makes a distinct `B -> A` step superfluous; and (2) if you just took this problem head on, without any for-knowledge of Elm or Redux, the simplest solution would just be to make an ordinary function that goes from `B` to `A`, not to build this process into your framework.
+2. Part of why there are containers in Redux is because you need to manually connect your React components to the store and dispatcher. Since Elm is more than just a framework, that connection built into the Html package, and you therefore dont need to implement this connection yourself.
+3. Frankly, theres been a lot of concept-creep with containers. What was just a small thing to connect components to the store has expanded into a big thing, just because it could. For some developers, containers have become just a kind of catch-all for stuff React people need to implement, without much thought into whether it really is something your UI framework should be dealing with. In Elm, view functions are strictly about turning the `Model` into `Html`, but in Redux, developers use things like `constructor()` and `componentDidMount()` to implement all kinds of logic, including actions, side effects into the DOM, and http requests. In Elm, the view function has a much narrower role that doesnt include such things.
+
 
 # Whats in this Package?
 
