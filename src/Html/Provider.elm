@@ -1,113 +1,23 @@
-module Html.Provider
-    exposing
-        ( Attribute
-        , Html
-        , a
-        , abbr
-        , address
-        , article
-        , aside
-        , audio
-        , b
-        , bdi
-        , bdo
-        , blockquote
-        , body
-        , br
-        , button
-        , canvas
-        , caption
-        , cite
-        , code
-        , col
-        , colgroup
-        , connect
-        , datalist
-        , dd
-        , del
-        , details
-        , dfn
-        , div
-        , dl
-        , dt
-        , em
-        , embed
-        , fieldset
-        , figcaption
-        , figure
-        , footer
-        , form
-        , from
-        , fromStandardHtml
-        , h1
-        , h2
-        , h3
-        , h4
-        , h5
-        , h6
-        , header
-        , hr
-        , i
-        , iframe
-        , img
-        , input
-        , ins
-        , kbd
-        , keygen
-        , label
-        , legend
-        , li
-        , main_
-        , map
-        , mark
-        , math
-        , menu
-        , menuitem
-        , meter
-        , nav
-        , node
-        , object
-        , ol
-        , optgroup
-        , option
-        , output
-        , p
-        , param
-        , pre
-        , progress
-        , q
-        , render
-        , rp
-        , rt
-        , ruby
-        , s
-        , samp
-        , section
-        , select
-        , small
-        , source
-        , span
-        , strong
-        , sub
-        , summary
-        , sup
-        , table
-        , tbody
-        , td
-        , text
-        , textarea
-        , tfoot
-        , th
-        , thead
-        , time
-        , tr
-        , track
-        , u
-        , ul
-        , var
-        , video
-        , wbr
-        )
+module Html.Provider exposing
+    ( connect, render, fromStandardHtml, from
+    , Html, Attribute, text, node, map
+    , h1, h2, h3, h4, h5, h6
+    , div, p, hr, pre, blockquote
+    , span, a, code, em, strong, i, b, u, sub, sup, br
+    , ol, ul, li, dl, dt, dd
+    , img, iframe, canvas, math
+    , form, input, textarea, button, select, option
+    , section, nav, article, aside, header, footer, address, main_, body
+    , figure, figcaption
+    , table, caption, colgroup, col, tbody, thead, tfoot, tr, td, th
+    , fieldset, legend, label, datalist, optgroup, keygen, output, progress, meter
+    , audio, video, source, track
+    , embed, object, param
+    , ins, del
+    , small, cite, dfn, abbr, time, var, samp, kbd, s, q
+    , mark, ruby, rt, rp, bdi, bdo, wbr
+    , details, summary, menuitem, menu
+    )
 
 {-| This file is organized roughly in order of popularity. The tags which you'd
 expect to use frequently will be closer to the top.
@@ -212,7 +122,7 @@ expect to use frequently will be closer to the top.
 
 import Html
 import Html.Attributes
-import VirtualDom
+
 
 
 -- CORE TYPES
@@ -244,7 +154,7 @@ fromStandardHtml =
 [`Html.Attributes`](Html-Attributes) module.
 -}
 type alias Attribute msg =
-    VirtualDom.Property msg
+    Html.Attribute msg
 
 
 {-| `connect` is fairly simple, it takes a function that maps `model` to `props` and a function that needs those `props` to render `Html` and with those two pieces it makes that `Html`. This way your rendering and prop-building can be discrete steps.
@@ -356,7 +266,6 @@ text =
 
 
 
---Html (VirtualDom.text str)
 -- NESTING VIEWS
 
 
