@@ -121,7 +121,7 @@ expect to use frequently will be closer to the top.
 -}
 
 import Html
-import Html.Attribute
+import Html.Attributes
 
 
 
